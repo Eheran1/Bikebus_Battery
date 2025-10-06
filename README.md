@@ -1,6 +1,6 @@
 # Bikebus_Battery
 With this code, you can replace a battery from an ebike with the bikebus communication system (like the Bulls SPORTSLITE Green Mover). 
-The BMS in the new battery is from Daly, so that is what the code expects to communicate with. But you could use any other BMS with or without communication with fairly minimal adaptation. All you really need is roughly the state of charge (SOC) of the battery and, if you want to look at it, the current draw. The other values are not really usefull.
+The BMS in the new battery is from Daly*, so that is what the code expects to communicate with. But you could use any other BMS with or without communication with fairly minimal adaptation. All you really need is roughly the state of charge (SOC) of the battery and, if you want to look at it, the current draw. The other values are not really usefull.
 
 All you need to do, on the software side of things, is upload the 7 files to an ESP32-C6 via the arduino IDE:
   1. Bikebus_from_Daly_2025_10_03.ino
@@ -21,3 +21,6 @@ To make sure we turn the output of the battery off when there is no connection, 
 
 The downside is that, starting from a disconnected battery (=output off) we do not realibly notice if a plug gets connected as the BMS has the output turned off. So we then need to press the button on the battery once to trigger a "plug check" -> turns the output on -> checks for the signal -> stays on or turns back off.
 The BMS is a low-side switch and the connection between pin 3 and 4 happens outside the battery, so I can not simply supply my own logic high on plug pin 3 or 4 and measure it on the other pin. I am not sure how to check the plug without risking damage and you need to press the button after inserting the battery (or attaching a plug). The low-side switching has already killed 2 or 3 MCUs since it causes everything on the bike to be floating at ~20 V or so while the output is off. So whatever you do, always assume the pack minus to be FAR above save levels for the MCU.
+
+*Daly SMART H SERIES L-Ion BMS 10S 36V for 55 dollar. I used the "BT+UART" one and then had to cut the BT lines to get UART (I did not have the right connector!). You should choose the BT+CAN version instead, it has both cables. The BT is nice to have, as you can check the battery status and change settings with your phone. We could also add a website to the MCU and let it do the same things, but that is a bit of effort to implement.
+https://bmsdaly.com/products/daly-smart-lifepo4-bms-4s-8s-16s-24s-12v-24v-48v-li-ion-10s-36v-13s-48v-20s-72v-40a-60a-bms-for-lithium-18650-battery-1
