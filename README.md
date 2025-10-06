@@ -11,13 +11,13 @@ All you need to do, on the software side of things, is upload the 7 files to an 
   6. Kalman.h
   7. Serial_Commands.ino
 
-Hardware looks like the following. Go to this simulator -> File -> Import from Text:
-https://www.falstad.com/circuit/
-Copy and paste the text from "Bikebus_Tranceiver_Leo_V1.3.txt" or download the txt file directly "open" it in the simulator.
+Hardware looks like the following. Go to the simulator:
+https://www.falstad.com/circuit/ 
+
+ -> File -> Import from Text. Copy and paste the text from "Bikebus_Tranceiver_Leo_V1.3.txt" or download the txt file directly "open" it in the simulator.
+ 
 Key for everything is the TLIN2029A tranceiver for the LIN bus. It can handle the high voltage directly and can be used to wake up the MCU when signals start flowing.
 To make sure we turn the output of the battery off when there is no connection, we use a 3.6 V zener diode. In my case, when I connect the plug (the type is rosenberg), pin 3 is connected to GND (Pack minus). So I pull it high to Pack plus (30...42 V) trough 100 kOhm and measure if it is pulled low -> connected. Otherwise we command the BMS to turn the output off to avoid short circuits etc.
+
 The downside is that, starting from a disconnected battery (=output off) we do not realibly notice if a plug gets connected as the BMS has the output turned off. So we then need to press the button on the battery once to trigger a "plug check" -> turns the output on -> checks for the signal -> stays on or turns back off.
-The BMS is a low-side switch and the connection between pin 3 and 4 happens outside the battery, so I can not simply supply my own logic high on plug pin 3 or 4 and measure it on the other pin. I am not sure how to check the plug without risking damage and you need to press the button after inserting the battery (or attaching a plug).
-
-
-
+The BMS is a low-side switch and the connection between pin 3 and 4 happens outside the battery, so I can not simply supply my own logic high on plug pin 3 or 4 and measure it on the other pin. I am not sure how to check the plug without risking damage and you need to press the button after inserting the battery (or attaching a plug). The low-side switching has already killed 2 or 3 MCUs since it causes everything on the bike to be floating at ~20 V or so while the output is off. So whatever you do, always assume the pack minus to be FAR above save levels for the MCU.
