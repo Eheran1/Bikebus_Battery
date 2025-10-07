@@ -4,7 +4,7 @@ We use an ESP32-C6 to communicate with both the new BMS (see below) and the Bike
 https://www.falstad.com/circuit/ 
 
  -> File -> Import from Text. Copy and paste the text from "Bikebus_Tranceiver_Leo_Vx.y.txt" or download the txt file and directly "open" it in the simulator.
- 
+
 Key for everything is the TLIN2029A tranceiver for the LIN bus. It can handle the high voltage directly and can be used to wake up the MCU when signals start flowing.
 To make sure we turn the output of the battery off when there is no connection, we use a 3.6 V zener diode. In my case, when I connect the plug (the type is rosenberg), pin 3 is connected to GND (Pack minus). So I pull it high to Pack plus (30...42 V) trough 100 kOhm and measure if it is pulled low -> connected. Otherwise we command the BMS to turn the output off to avoid short circuits etc.
 
@@ -13,6 +13,9 @@ The BMS is a low-side switch and the connection between pin 3 and 4 happens outs
 
 You can also read all of my posts in this thread. Be aware that some details changed over time as I understood the system better, so make sure to read everything (or ask here/there) before damaging something.
 https://www.pedelecforum.de/forum/index.php?threads/go-swissdrive-bikebus-service-adapter.94004/
+
+# BMS
+Of course we also need to connect the BMS itself to the battery cells. Just changing the BMS means the battery itself will work, but the display will not show the capacity nor the current. The contact would also always be live and since there are magnets in the plug, steel will get attracted and could short it. In the "Pinout Akku Balancing.jpg" you can find the pinout of the existing balancing plug. Please check to make sure this is correct for you too. Snip one wire at a time, insert a piece of heat shrink tube, solder it to the new BMS plug, slide the heat shrink over and apply heat to shrink/seal the connection. One wire at a time reduces the risk of short circuits.
 
 *Daly SMART H SERIES L-Ion BMS 10S 36V for 55 dollar. I used the "BT+UART" one and then had to cut the BT lines to get UART (I did not have the right connector!). You should choose the BT+CAN version instead, it has both cables. The BT is nice to have, as you can check the battery status and change settings with your phone. We could also add a website to the MCU and let it do the same things, but that is a bit of effort to implement.
 https://bmsdaly.com/products/daly-smart-lifepo4-bms-4s-8s-16s-24s-12v-24v-48v-li-ion-10s-36v-13s-48v-20s-72v-40a-60a-bms-for-lithium-18650-battery-1
